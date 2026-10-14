@@ -2,10 +2,12 @@ package gateway;
 
 import gateway.notification.BatchSummary;
 import gateway.notification.EncryptedNotification;
+import gateway.notification.MarketingNotification;
 import gateway.notification.Notification;
 import gateway.notification.ScheduledBatchNotification;
 import gateway.notification.UrgentNotification;
 import gateway.sender.EmailMessageSender;
+import gateway.sender.PushNotificationSender;
 import gateway.sender.SmsMessageSender;
 import gateway.sender.TelegramMessageSender;
 
@@ -19,6 +21,7 @@ public class Main {
         batchOverSms();
         runtimeSwitching();
         fallbackToSms();
+        marketingOverPush();
     }
 
     private static void header(String text) {
@@ -82,5 +85,12 @@ public class Main {
         UrgentNotification notification = new UrgentNotification(telegram, sms);
         notification.send("+77011234567", "Database is not responding");
         System.out.println("  delivered via: " + notification.getLastUsedChannel());
+    }
+
+    // 6
+    private static void marketingOverPush() {
+        header("6. MarketingNotification + PushNotificationSender");
+        Notification notification = new MarketingNotification(new PushNotificationSender(), "AUTUMN SALE");
+        notification.send("device-7f3a9c", "20% off all courses until Friday");
     }
 }
