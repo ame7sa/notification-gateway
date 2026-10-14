@@ -1,0 +1,139 @@
+digraph Bridge {
+    rankdir=TB;
+    nodesep=0.35;
+    ranksep=0.9;
+    fontname="Helvetica";
+    node [shape=plain, fontname="Helvetica", fontsize=11];
+    edge [fontname="Helvetica", fontsize=10];
+
+    Notification [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7d6">
+          <tr><td><i>&laquo;Abstraction&raquo;</i></td></tr>
+          <tr><td><b><i>Notification</i></b></td></tr>
+          <hr/>
+          <tr><td align="left"># sender : MessageSender</td></tr>
+          <hr/>
+          <tr><td align="left">+ Notification(sender)</td></tr>
+          <tr><td align="left">+ setSender(sender) : void</td></tr>
+          <tr><td align="left">+ <i>send(recipient, message) : void</i></td></tr>
+          <tr><td align="left"># deliver(recipient, title, body) : void</td></tr>
+        </table>>];
+
+    Urgent [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7d6">
+          <tr><td><i>&laquo;Refined Abstraction&raquo;</i></td></tr>
+          <tr><td><b>UrgentNotification</b></td></tr>
+          <hr/>
+          <tr><td align="left">- fallbacks : List&lt;MessageSender&gt;</td></tr>
+          <hr/>
+          <tr><td align="left">+ addFallback(sender)</td></tr>
+          <tr><td align="left">+ send(recipient, message)</td></tr>
+        </table>>];
+
+    Encrypted [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7d6">
+          <tr><td><i>&laquo;Refined Abstraction&raquo;</i></td></tr>
+          <tr><td><b>EncryptedNotification</b></td></tr>
+          <hr/>
+          <tr><td align="left">- cipher : SimpleCipher</td></tr>
+          <hr/>
+          <tr><td align="left">+ send(recipient, message)</td></tr>
+          <tr><td align="left">+ decrypt(text) : String</td></tr>
+        </table>>];
+
+    Batch [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7d6">
+          <tr><td><i>&laquo;Refined Abstraction&raquo;</i></td></tr>
+          <tr><td><b>ScheduledBatchNotification</b></td></tr>
+          <hr/>
+          <tr><td align="left">- recipients : List&lt;String&gt;</td></tr>
+          <hr/>
+          <tr><td align="left">+ send(recipient, message)</td></tr>
+          <tr><td align="left">+ sendToAll(message)</td></tr>
+          <tr><td align="left">+ getLastSummary() : BatchSummary</td></tr>
+        </table>>];
+
+    Marketing [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#fff7d6">
+          <tr><td><i>&laquo;Refined Abstraction&raquo;</i></td></tr>
+          <tr><td><b>MarketingNotification</b></td></tr>
+          <tr><td><font point-size="9">(added later)</font></td></tr>
+          <hr/>
+          <tr><td align="left">- campaign : String</td></tr>
+          <hr/>
+          <tr><td align="left">+ send(recipient, message)</td></tr>
+        </table>>];
+
+    MessageSender [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#dff1ff">
+          <tr><td><i>&laquo;Implementor&raquo;</i></td></tr>
+          <tr><td><i>&laquo;interface&raquo;</i></td></tr>
+          <tr><td><b><i>MessageSender</i></b></td></tr>
+          <hr/>
+          <tr><td align="left">+ sendMessage(recipient, title, body) : boolean</td></tr>
+          <tr><td align="left">+ isAvailable() : boolean</td></tr>
+          <tr><td align="left">+ getChannelName() : String</td></tr>
+        </table>>];
+
+    Simulated [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#eef7ff">
+          <tr><td><b><i>SimulatedSender</i></b></td></tr>
+          <tr><td><font point-size="9">(helper base class)</font></td></tr>
+          <hr/>
+          <tr><td align="left">- available : boolean</td></tr>
+          <tr><td align="left">- sentMessages : List&lt;String&gt;</td></tr>
+          <hr/>
+          <tr><td align="left"># <i>buildPayload(recipient, title, body)</i></td></tr>
+          <tr><td align="left">+ setAvailable(boolean)</td></tr>
+        </table>>];
+
+    Telegram [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#dff1ff">
+          <tr><td><i>&laquo;Concrete Implementor&raquo;</i></td></tr>
+          <tr><td><b>TelegramMessageSender</b></td></tr>
+        </table>>];
+    Email [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#dff1ff">
+          <tr><td><i>&laquo;Concrete Implementor&raquo;</i></td></tr>
+          <tr><td><b>EmailMessageSender</b></td></tr>
+        </table>>];
+    Sms [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#dff1ff">
+          <tr><td><i>&laquo;Concrete Implementor&raquo;</i></td></tr>
+          <tr><td><b>SmsMessageSender</b></td></tr>
+          <hr/>
+          <tr><td align="left">- maxLength : int (160)</td></tr>
+        </table>>];
+    Kafka [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#dff1ff">
+          <tr><td><i>&laquo;Concrete Implementor&raquo;</i></td></tr>
+          <tr><td><b>KafkaEventSender</b></td></tr>
+        </table>>];
+    Push [label=<
+        <table border="1" cellborder="0" cellspacing="0" cellpadding="4" bgcolor="#dff1ff">
+          <tr><td><i>&laquo;Concrete Implementor&raquo;</i></td></tr>
+          <tr><td><b>PushNotificationSender</b></td></tr>
+          <tr><td><font point-size="9">(added later)</font></td></tr>
+        </table>>];
+
+    { rank=same; Telegram; Email; Sms; Kafka; Push; }
+
+    // inheritance on the abstraction side (parent on top, arrow head at the parent)
+    Notification -> Urgent    [dir=back, arrowtail=empty];
+    Notification -> Encrypted [dir=back, arrowtail=empty];
+    Notification -> Batch     [dir=back, arrowtail=empty];
+    Notification -> Marketing [dir=back, arrowtail=empty];
+
+    // THE BRIDGE: Notification keeps a reference to MessageSender
+    Notification -> MessageSender [dir=both, arrowtail=odiamond, arrowhead=vee,
+        penwidth=2.5, color="#c0392b", fontcolor="#c0392b",
+        label="  has-a  (sender)\n  THE BRIDGE  "];
+
+    // implementor side
+    MessageSender -> Simulated [dir=back, arrowtail=empty, style=dashed];
+    Simulated -> Telegram [dir=back, arrowtail=empty];
+    Simulated -> Email    [dir=back, arrowtail=empty];
+    Simulated -> Sms      [dir=back, arrowtail=empty];
+    Simulated -> Kafka    [dir=back, arrowtail=empty];
+    Simulated -> Push     [dir=back, arrowtail=empty];
+}
